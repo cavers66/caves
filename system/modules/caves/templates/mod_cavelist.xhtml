@@ -1,0 +1,63 @@
+<?php
+  // Einbinden der "tablesort.css" und "tablesort.js"
+  $GLOBALS['TL_CSS'][] = 'assets/mootools/tablesort/css/tablesort.css';
+	$GLOBALS['TL_MOOTOOLS'][] = '<script src="' . TL_PLUGINS_URL . 'assets/mootools/tablesort/js/tablesort.js"></script>'; ?>
+
+<div class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+<?php if ($this->headline): ?> 
+
+<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<?php endif; ?>
+
+<?php  // Prüfen ob "Cookie" für Sortierung gesetzt ist
+  if (!strlen($this->Input->cookie('TS_TABLE_CAVES')))
+					{
+						setcookie('TS_TABLE_CAVES', 0 . '|' . 'asc', 0, '/');
+					}
+?> 
+
+<div class="ce_table block">
+    <table class="sortable" id="table_caves" summary="Höhlenliste" style="margin-bottom: 0;">
+      <thead>
+        <tr>
+          <th class="head_0 col_first"><a class="pointer">Name</a></th>
+          <th class="head_1"><a class="pointer">PLZ</a></th>
+          <th class="head_2"><a class="pointer">Stadt</a></th>
+          <th class="head_3 col_last">Bild</th>
+        </tr>
+      </thead>
+      <tbody>
+<?php
+        $row = 0;         // Zähler für die Reihen
+        $class_tr = '';   // Variable für Zusammengesetzte Klassenangabe
+        foreach ($this->caves as $cave)
+        {
+          $class_tr = 'row_'.$row;
+          if ($row == 0) $class_tr . ' row_first';
+          if ($row == count($this->caves)-1) $class_tr . ' row_last';
+          $class_tr . (($row % 2) == 0) ? ' even' : ' odd'; 
+          $imgPath = \FilesModel::findByPk($cave['titlepicture'])->path;
+          if ($imgPath =="")
+          {
+          $imgPath = 'system/modules/caves/assets/default.jpg';
+          }
+          
+          echo '<tr class="' . $class_tr . '">';
+          echo    '<td class="col_0 col_first">' . trim($cave['name']). '</td>';
+          echo    '<td class="col_1">' . trim($cave['postal']) . '</td>';
+          echo    '<td class="col_2">' . trim($cave['city']) . '</td>';
+          echo    '<td class="col_3 col_last">';
+          echo      '<img src="' . $this->getImage($imgPath, '80', '60') . '" alt="' . $cave['name'] . '" width="80" height="60" />';
+          echo    '</td>';
+          echo '</tr>';
+          $row++;
+        }
+?>
+      </tbody>
+    </table>
+    <script type="text/javascript">
+      /* <![CDATA[ */window.addEvent("domready", function() {new TableSort("table_caves", ".", ",");});/* ]]> */
+    </script>
+  </div>
+
+</div>
