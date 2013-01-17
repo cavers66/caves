@@ -220,7 +220,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
       'default'                 => '0.000000',
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('helpwizard'=>true,'rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+      'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
       'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
 		),
 		'longitude' => array
@@ -229,19 +229,10 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
       'default'                 => '0.000000',
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+      'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
+      'wizard'                  => array(array('tl_cave', 'getGpsCalc')),
       'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
 		),
-		//
-		/*'GM' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['GM'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'save_callback'           => array('tl_cave','setEmpty'),
-			'eval'                    => array('submitOnChange'=>true, 'doNotSaveEmpty'=>true),
-		),*/
-		//
 		'altitude' => array
 		(
       'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['altitude'],
@@ -430,9 +421,10 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['equipment'],
 			'inputType'               => 'checkbox',
 			'options_callback'        => array('tl_cave', 'getEquipment'),
-			'load_callback'           => array(array('tl_cave', 'setDefaultEquipment')),
-			'save_callback'           => array(array('tl_cave', 'setDefaultEquipment')), 
-			'eval'                    => array('multiple'=>true),
+			'load_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Laden der Defaultwerte
+			'save_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Speichert auch die Defaultwerte obwohl "disabled"
+			'eval'                    => array('multiple'=>true, 'alwaysSave' =>true),    // 'alwaysSave'=>true, damit werte auf jeden fall gespeichert werden
+      'wizard'                  => array(array('tl_cave', 'disableDefault')), // Deaktivieren der Checkboxen mit Defaultwerten
 			'sql'                     => "blob NULL"
 		),
 		'titlepicture' => array
@@ -525,6 +517,11 @@ class tl_cave extends Backend
 		return $varValue;
 	}
 	
+  /**
+	 * Generiert die Checkboxen anhand der Tabelle: tl_cave_equipment
+	 * @return array()
+	 * @throws 
+	 */
   public function getEquipment()
   {
     $objOptions = $this->Database->prepare("SELECT * FROM tl_cave_equipment")->execute();
@@ -535,7 +532,14 @@ class tl_cave extends Backend
     }
     return $arrOptions;
   }
-  public function setDefaultEquipment($varValue,DataContainer $dc)
+  
+  /**
+	 * Setzt die Defaultwerte in den Checkboxen wenn diese Pflicht (mandatory) sind.
+	 * @param string
+	 * @return string
+	 * @throws 
+	 */  
+  public function setDefaultEquipment($varValue)
   {                    
       $varArray = array();
       $varArray = deserialize($varValue);
@@ -561,9 +565,54 @@ class tl_cave extends Backend
     return $varValue;
   }
   
-  public function setEmpty($varValue,DataContainer $dc)
+  public function getGpsCalc()
   {
-    $varValue = '';
-    return $varValue;
+    $phpForm = '
+      <img id="test" width="20" height="20" style="vertical-align:-6px;cursor:pointer" title="" alt="" src="assets/mootools/datepicker/2.1.1/icon.gif">
+      <script>   
+        $("test").addEvent("click", function(){ alert("Hallo")});    
+        </script>';
+    return $phpForm;
   }
+  
+    /**
+	 * Disabled die Checkboxen mit Defaultwerten per JawaScript 
+	 * @return string
+	 * @throws 
+	 */  
+  public function disableDefault()
+  {
+  $objDefaults = $this->Database->prepare("SELECT * FROM tl_cave_equipment")->execute();
+      $arrDefaults = array();
+      while ($objDefaults->next())
+      {
+        if ($objDefaults->ismandatory == '1')
+        {
+          $arrDefaults[]=$objDefaults->title;
+        }
+      }
+      $temp = "'" . implode("','", $arrDefaults) . "'";   //Array für javascript
+      
+      $sJavaScript = '
+        <script type="text/javascript">
+        <!--//--><![CDATA[//><!--   
+        disableDefault = function(){
+          phparray = [' . $temp . '];
+          for (var i = 0; i < tl_cave.elements.length; i++)
+          {
+            res = phparray.indexOf(tl_cave.elements[i].value);
+            if (res >= 0 )
+            {
+              tl_cave.elements[i].disabled = true;
+            }
+          }
+        };
+        window.addEvent("domready", function(){
+          disableDefault();
+        });
+        //--><!]]></script>';
+      return $sJavaScript;
+  }
+  
+  
 }

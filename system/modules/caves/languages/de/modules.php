@@ -22,7 +22,7 @@ $GLOBALS['TL_LANG']['MOD']['category'][0] = 'Höhlenkategorien';
 $GLOBALS['TL_LANG']['MOD']['category'][1] = 'Höhlenkategorien verwalten';
 $GLOBALS['TL_LANG']['MOD']['equipment'][0] = 'Höhlenausrüstung';
 $GLOBALS['TL_LANG']['MOD']['equipment'][1] = 'Höhlenausrüstung verwalten';
-$GLOBALS['TL_LANG']['MOD']['mapsheets'][0] = 'Kartenbätter';
+$GLOBALS['TL_LANG']['MOD']['mapsheets'][0] = 'Kartenblätter';
 $GLOBALS['TL_LANG']['MOD']['mapsheets'][1] = 'Kartenblätter verwalten';
 
 
