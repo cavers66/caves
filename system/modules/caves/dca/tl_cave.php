@@ -568,7 +568,7 @@ class tl_cave extends Backend
   public function getGpsCalc()
   {
     $phpForm = '
-      <img id="test" width="20" height="20" style="vertical-align:-6px;cursor:pointer" title="" alt="" src="assets/mootools/datepicker/2.1.1/icon.gif">
+      <img id="test" width="20" height="20" style="vertical-align:-6px;cursor:pointer" title="" alt="" src="system/modules/caves/assets/convert-icon.png">
       <script>   
         $("test").addEvent("click", function(){ alert("Hallo")});    
         </script>';

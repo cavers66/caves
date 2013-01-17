@@ -37,6 +37,7 @@
           if ($row == count($this->caves)-1) $class_tr . ' row_last';
           $class_tr . (($row % 2) == 0) ? ' even' : ' odd'; 
           $imgPath = \FilesModel::findByPk($cave['titlepicture'])->path;
+          $imgName = \FilesModel::findByPk($cave['titlepicture'])->name;
           if ($imgPath =="")
           {
           $imgPath = 'system/modules/caves/assets/default.jpg';
@@ -47,7 +48,7 @@
           echo    '<td class="col_1">' . trim($cave['postal']) . '</td>';
           echo    '<td class="col_2">' . trim($cave['city']) . '</td>';
           echo    '<td class="col_3 col_last">';
-          echo      '<img src="' . $this->getImage($imgPath, '80', '60') . '" alt="' . $cave['name'] . '" width="80" height="60" />';
+          echo      '<a href="' . $imgPath . '" rel="lightbox[lb7]" title="' . $imgName . '"><img src="' . $this->getImage($imgPath, '80', '60') . '" alt="' . $cave['name'] . '" width="80" height="60" /></a>';
           echo    '</td>';
           echo '</tr>';
           $row++;
