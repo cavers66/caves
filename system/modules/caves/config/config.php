@@ -42,22 +42,22 @@ array_insert($GLOBALS['BE_MOD']['cave'], 1, array(
 	'caves'	=> array
 	(
 		'tables'	=> array('tl_cave_archive','tl_cave'),
-		'icon'    => 'system/modules/caves/assets/caves-icon.png'
+		'icon'    => 'system/modules/caves/assets/img/caves-icon.png'
 	),
 	'category' => array
 	(
     'tables' => array('tl_cave_category'),
-    'icon'    => 'system/modules/caves/assets/category-icon.png'
+    'icon'    => 'system/modules/caves/assets/img/category-icon.png'
 	),
 	'equipment' => array
 	(
     'tables' => array('tl_cave_equipment'),
-    'icon'    => 'system/modules/caves/assets/equipment-icon.png'
+    'icon'    => 'system/modules/caves/assets/img/equipment-icon.png'
 	),
 	'mapsheets' => array
 	(
     'tables'  => array('tl_cave_mapsheets'),
-    'icon'    => 'system/modules/caves/assets/mapsheets-icon.png'
+    'icon'    => 'system/modules/caves/assets/img/mapsheets-icon.png'
 	)
 ));
 
