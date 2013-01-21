@@ -230,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
       'exclude'                 => true,
       'inputType'               => 'text',
       'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
-      'wizard'                  => array(array('tl_cave', 'getGpsCalc')),
+      'wizard'                  => array(array('tl_cave', 'getGpsConverter')),
       'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
 		),
 		'altitude' => array
@@ -565,13 +565,15 @@ class tl_cave extends Backend
     return $varValue;
   }
   
-  public function getGpsCalc()
+  public function getGpsConverter()
   {
     $phpForm = '
-      <img id="test" width="20" height="20" style="vertical-align:-6px;cursor:pointer" title="" alt="" src="system/modules/caves/assets/convert-icon.png">
-      <script>   
-        $("test").addEvent("click", function(){ alert("Hallo")});    
-        </script>';
+      <img id="cave-converter" width="20" height="20" style="vertical-align:-6px;cursor:pointer" title="Koordinatenkonverter" alt="Koordinatenkonverter" src="system/modules/caves/assets/img/convert-icon.png">';
+      if (TL_MODE == 'BE')
+      {
+      $GLOBALS['TL_CSS'][]='system/modules/caves/assets/css/converter.css';
+      $GLOBALS['TL_JAVASCRIPT'][]='system/modules/caves/assets/js/converter.js';
+      }
     return $phpForm;
   }
   
