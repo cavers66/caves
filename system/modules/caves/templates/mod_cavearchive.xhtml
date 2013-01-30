@@ -3,6 +3,8 @@
 <?php if ($this->headline): ?> 
 
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
-<?php endif; ?> 
+<?php endif; ?>
+<?php foreach($this->articles as $article) echo $article; ?>
+<?php echo $this->pagination; ?> 
 
 </div>
