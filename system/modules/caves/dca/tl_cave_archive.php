@@ -101,7 +101,13 @@ $GLOBALS['TL_DCA']['tl_cave_archive'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,alias;{publish_legend},published,start,stop'
+		'__selector__'                => array('addDefImage'),
+        'default'                     => '{title_legend},title,alias,jumpTo;{picture_legend:hide},addDefImage;{publish_legend},published,start,stop'
+	),
+    // Subpalettes
+	'subpalettes' => array
+	(
+        'addDefImage'                    => 'singleSRC'
 	),
 
 	// Fields
@@ -136,7 +142,33 @@ $GLOBALS['TL_DCA']['tl_cave_archive'] = array
 			),
 			'sql'                     => "varbinary(128) NOT NULL default ''"
 		),
-		'published' => array
+        'jumpTo' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave_archive']['jumpTo'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'foreignKey'              => 'tl_cave.name',
+			'eval'                    => array('fieldType'=>'radio'),
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+			'relation'                => array('type'=>'hasOne', 'load'=>'eager')
+		),
+        'addDefImage' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave_archive']['addDefImage'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('submitOnChange'=>true),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'singleSRC' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave_archive']['singleSRC'],
+			'exclude'                 => true,
+			'inputType'               => 'fileTree',
+			'eval'                    => array('files'=>true, 'fieldType'=>'radio','filesOnly'=>true, 'extensions'=>'jpg,jpeg,png,gif'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
+        'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave_archive']['published'],
 			'exclude'                 => true,
@@ -209,5 +241,6 @@ class tl_cave_archive extends Backend
 
 		return $varValue;
 	}
+
 
 }

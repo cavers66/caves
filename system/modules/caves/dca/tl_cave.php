@@ -101,18 +101,18 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'                => array('notpublicopen','islock'),
+		'__selector__'                => array('notpublicopen','islock','addImage','addLinks'),
 		'default'                     => '{name_legend},name,alias,author;
-                                      {date_legend},date,time;
+                                      {date_legend:hide},date,time;
                                       {cadaster_legend},cadastrenumber,mapsheet;
-                                      {gps_legend:hide},latitude,longitude,GM,altitude;
-                                      {address_legend:hide},street,postal,city,country;
+                                      {gps_legend:hide},latitude,longitude,isSecure,altitude;
+                                      {address_legend:hide},street,postal,country,city;
                                       {directions_legend:hide},directions;
                                       {data_legend},category,mainlength,totallength,notpublicopen,islock;
                                       {statistics_legend:hide},evaluation,difficulty,wheelinglife;
                                       {description_legend},description;
                                       {equipment_legend:hide},equipment;
-                                      {pictures_legend:hide},titlepicture,picturespath;
+                                      {pictures_legend:hide},addImage,addLinks;
                                       {publish_legend},published,start,stop'
 	),
 
@@ -120,7 +120,9 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 	'subpalettes' => array
 	(
 		'notpublicopen'               => 'contact',
-		'islock'                      => 'lockofday,lockofmonth,locktoday,locktomonth'
+		'islock'                      => 'lockofday,lockofmonth,locktoday,locktomonth',
+        'addImage'                    => 'singleSRC',
+        'addLinks'                    => 'links'
 	),
 
 	// Fields
@@ -198,49 +200,58 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 		),
 		'cadastrenumber' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['cadastrenumber'],
-      'exclude'                 => true,
-      'inputType'               => 'text',
-      'eval'                    => array('doNotCopy'=>true, 'tl_class'=>'w50'),
-      'sql'                     => "varchar(255) NOT NULL default ''"
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['cadastrenumber'],
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => array('doNotCopy'=>true, 'tl_class'=>'w50'),
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'mapsheet' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['mapsheet'],
-      'exclude'                 => true,
-      'inputType'               => 'select',
-      'foreignKey'              => "tl_cave_mapsheets.CONCAT(mapnumber, ' ', city)",
-      'eval'                    => array('doNotCopy'=>true, 'includeBlankOption'=>true, 'tl_class'=>'w50'),
-      'sql'                     => "int(10) unsigned NOT NULL default '0'",
-      'relation'                => array('type'=>'hasOne', 'load'=>'eager')
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['mapsheet'],
+            'exclude'                 => true,
+            'inputType'               => 'select',
+            'foreignKey'              => "tl_cave_mapsheets.CONCAT(mapnumber, ' ', city)",
+            'eval'                    => array('doNotCopy'=>true, 'includeBlankOption'=>true, 'tl_class'=>'w50'),
+            'sql'                     => "int(10) unsigned NOT NULL default '0'",
+            'relation'                => array('type'=>'hasOne', 'load'=>'eager')
 		),
 		'latitude' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['latitude'],
-      'default'                 => '0.000000',
-      'exclude'                 => true,
-      'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
-      'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['latitude'],
+            'default'                 => '0.000000',
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
+            'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
 		),
 		'longitude' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['longitude'],
-      'default'                 => '0.000000',
-      'exclude'                 => true,
-      'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
-      'wizard'                  => array(array('tl_cave', 'getGpsConverter')),
-      'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['longitude'],
+            'default'                 => '0.000000',
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
+            'wizard'                  => array(array('tl_cave', 'getGpsConverter')),
+            'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
+		),
+        'isSecure' => array
+		(
+	        'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['isSecure'],
+	        'exclude'                 => true,
+	        'filter'                  => true,
+	        'inputType'               => 'checkbox',
+	        'eval'                    => array('isBoolean' => true,'doNotCopy'=>true,'tl_class'=>'clr m12'),
+	        'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'altitude' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['altitude'],
-      'default'                 => '0',
-      'exclude'                 => true,
-      'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'alnum', 'doNotCopy'=>true, 'tl_class'=>'clr'),
-      'sql'                     => "varchar(255) NOT NULL default ''"
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['altitude'],
+            'default'                 => '0',
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => array('rgxp'=>'alnum', 'doNotCopy'=>true, 'tl_class'=>'clr'),
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'street' => array
 		(
@@ -248,7 +259,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr'),
+			'eval'                    => array('maxlength'=>255,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'postal' => array
@@ -257,19 +268,8 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>32, 'tl_class'=>'w50'),
+			'eval'                    => array('maxlength'=>32,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(32) NOT NULL default ''"
-		),
-		'city' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['city'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'country' => array
 		(
@@ -280,8 +280,19 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'sorting'                 => true,
 			'inputType'               => 'select',
 			'options'                 => $this->getCountries(),
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'clr'),
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(2) NOT NULL default ''"
+		),
+        'city' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['city'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255,'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'directions' => array
 		(
@@ -289,12 +300,12 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'eval'                    => array('rte'=>'tinyMCE'),
+			'eval'                    => array('doNotCopy'=>true,'style'=>'height: 80px;'),
 			'sql'                     => "text NULL"
 		),
 		'category' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['category'],
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['category'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'foreignKey'              => 'tl_cave_category.title',
@@ -303,18 +314,18 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 		),
 		'mainlength' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['mainlength'],
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['mainlength'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>false, 'maxlength'=>7, 'tl_class'=>'w50'),
+			'eval'                    => array('mandatory'=>false, 'maxlength'=>7,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "decimal(6,1) NOT NULL default '0.0'"
 		),
 		'totallength' => array
 		(
-      'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['totallength'],
+            'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['totallength'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>false, 'maxlength'=>7, 'tl_class'=>'w50'),
+			'eval'                    => array('mandatory'=>false, 'maxlength'=>7,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "decimal(6,1) NOT NULL default '0.0'"
 		),
 		'notpublicopen' => array
@@ -323,7 +334,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true),
+			'eval'                    => array('submitOnChange'=>true,'doNotCopy'=>true, 'tl_class'=>'clr m12'),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'contact' => array
@@ -332,7 +343,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'eval'                    => array('rte'=>'tinyMCE'),
+			'eval'                    => array('doNotCopy'=>true,'style'=>'height:80px'),
 			'sql'                     => "text NULL"
 		),
 		'islock' => array
@@ -341,7 +352,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true),
+			'eval'                    => array('submitOnChange'=>true,'doNotCopy'=>true,'tl_class'=>'clr m12'),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'lockofday' => array
@@ -350,7 +361,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => range(1,31),
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption'=>true,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(2) NOT NULL default ''"
 		),
 		'lockofmonth' => array
@@ -360,7 +371,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'inputType'               => 'select',
 			'options'                 => range(0,11),
 			'reference'               => &$GLOBALS['TL_LANG'][MONTHS],
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption'=>true,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(2) NOT NULL default ''"
 		),
 		'locktoday' => array
@@ -369,7 +380,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => range(1,31),
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption'=>true,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(2) NOT NULL default ''"
 		),
 		'locktomonth' => array
@@ -379,7 +390,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'inputType'               => 'select',
 			'options'                 => range(0,11),
 			'reference'               => &$GLOBALS['TL_LANG'][MONTHS],
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption'=>true,'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(2) NOT NULL default ''"
 		),
 		'evaluation' => array
@@ -388,7 +399,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => range(1,6),
-			'eval'                    => array('includeBlankOption' =>true,'mandatory'=>false, 'maxlength'=>2, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption' =>true,'mandatory'=>false,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(1) NOT NULL default ''"
 		),
 		'difficulty' => array
@@ -397,7 +408,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => range(1,6),
-			'eval'                    => array('includeBlankOption' =>true, 'mandatory'=>false, 'maxlength'=>2, 'tl_class'=>'w50'),
+			'eval'                    => array('includeBlankOption' =>true, 'mandatory'=>false,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(1) NOT NULL default ''"
 		),
 		'wheelinglife' => array
@@ -405,7 +416,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['wheelinglife'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>false, 'maxlength'=>8, 'tl_class'=>'clr'),
+			'eval'                    => array('mandatory'=>false, 'maxlength'=>8,'doNotCopy'=>true, 'tl_class'=>'clr'),
 			'sql'                     => "varchar(10) NOT NULL default ''"
 		),
 		'description' => array
@@ -423,25 +434,57 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'options_callback'        => array('tl_cave', 'getEquipment'),
 			'load_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Laden der Defaultwerte
 			'save_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Speichert auch die Defaultwerte obwohl "disabled"
-			'eval'                    => array('multiple'=>true, 'alwaysSave' =>true),    // 'alwaysSave'=>true, damit werte auf jeden fall gespeichert werden
-      'wizard'                  => array(array('tl_cave', 'disableDefault')), // Deaktivieren der Checkboxen mit Defaultwerten
+			'eval'                    => array('multiple'=>true, 'alwaysSave' =>true,'doNotCopy'=>true),    // 'alwaysSave'=>true, damit werte auf jeden fall gespeichert werden
+            'wizard'                  => array(array('tl_cave', 'disableDefault')), // Deaktivieren der Checkboxen mit Defaultwerten
 			'sql'                     => "blob NULL"
 		),
-		'titlepicture' => array
+        'addImage' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['titlepicture'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['addImage'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('submitOnChange'=>true,'doNotCopy'=>true),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'singleSRC' => array 
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['singleSRC'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>false, 'path'=>'files/cavers/cavedb/','files'=>true, 'fieldType'=>'radio','filesOnly'=>true, 'extensions'=>'jpg,jpeg,png.gif'),
+			'eval'                    => array('alwaysSave' =>true, 'files'=>true, 'fieldType'=>'radio','filesOnly'=>true, 'extensions'=>'jpg,jpeg,png.gif','doNotCopy'=>true),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
-		'picturespath' => array
+        'addLinks' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['picturespath'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['addLinks'],
 			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>false, 'files'=>false, 'fieldType'=>'radio','filesOnly'=>false),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'inputType'               => 'checkbox',
+			'eval'                    => array('submitOnChange'=>true,'tl_class'=>'clr m12'),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+       'links' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['links'],
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+                (      
+                    'columnFields'    => array
+                        (
+                            'url'       => array
+                                (
+                                    'label'     => &$GLOBALS['TL_LANG']['tl_cave']['url'],
+                                    'inputType' => 'text',
+                                    'eval'      => array('mandatory'=>true,'rgxp'=>'url', 'decodeEntities'=>true, 'style'=>'width:270px;')                                   
+                                ),
+                            'titleText' => array
+                                (
+                                    'label'     => &$GLOBALS['TL_LANG']['tl_cave']['titleText'],
+                                    'inputType' => 'text',                                   
+                                    'eval'      => array('mandatory'=>true, 'style'=>'width:310px;')
+                                )
+                        )
+                    ),
+			'sql'                     => "blob NULL"
 		),
 		'published' => array
 		(
@@ -469,7 +512,8 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 			'sql'                     => "varchar(10) NOT NULL default ''"
 		)			
-	)
+	),
+    
 );
 /**
  * Class tl_cave
@@ -515,6 +559,16 @@ class tl_cave extends Backend
 		}
 
 		return $varValue;
+	}
+
+    /**
+	 * Return the link picker wizard
+	 * @param \DataContainer
+	 * @return string
+	 */
+	public function pagePicker(DataContainer $dc)
+	{
+		return ' <a href="contao/page.php?do='.Input::get('do').'&amp;table='.$dc->table.'&amp;field='.$dc->field.'&amp;value='.str_replace(array('{{link_url::', '}}'), '', $dc->value).'" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['pagepicker']).'" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\''.specialchars(str_replace("'", "\\'", $GLOBALS['TL_LANG']['MOD']['page'][0])).'\',\'url\':this.href,\'id\':\''.$dc->field.'\',\'tag\':\'ctrl_'.$dc->field . ((Input::get('act') == 'editAll') ? '_' . $dc->id : '').'\',\'self\':this});return false">' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer"') . '</a>';
 	}
 	
   /**
@@ -615,6 +669,5 @@ class tl_cave extends Backend
         //--><!]]></script>';
       return $sJavaScript;
   }
-  
   
 }
