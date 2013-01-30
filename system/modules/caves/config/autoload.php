@@ -16,8 +16,8 @@
  */
 ClassLoader::addNamespaces(array
 (
-	'caves',
-));
+	'Caves',
+)); 
 
 
 /**
@@ -26,12 +26,20 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'caves\Cave'              => 'system/modules/caves/classes/Cave.php',
+	'Caves\Cave'              => 'system/modules/caves/classes/Cave.php',
 
-	// Modules
-	'caves\ModuleCaveArchive' => 'system/modules/caves/modules/ModuleCaveArchive.php',
-	'caves\ModuleCaveDetails' => 'system/modules/caves/modules/ModuleCaveDetails.php',
-	'caves\ModuleCaveList'    => 'system/modules/caves/modules/ModuleCaveList.php',
+	// Models
+    'Caves\CaveArchiveModel'    => 'system/modules/caves/models/CaveArchiveModel.php',
+    'Caves\CaveCategoryModel'   => 'system/modules/caves/models/CaveCategoryModel.php',
+    'Caves\CaveEquipmentModel'  => 'system/modules/caves/models/CaveEquipmentModel.php',
+    'Caves\CaveMapsheetsModel'           => 'system/modules/caves/models/CaveMapsheetsModel.php',
+    'Caves\CaveModel'           => 'system/modules/caves/models/CaveModel.php',
+  
+    // Modules
+	'Caves\ModuleCave'        => 'system/modules/caves/modules/ModuleCave.php',
+    'Caves\ModuleCaveArchive' => 'system/modules/caves/modules/ModuleCaveArchive.php',
+	'Caves\ModuleCaveDetails' => 'system/modules/caves/modules/ModuleCaveDetails.php',
+	'Caves\ModuleCaveList'    => 'system/modules/caves/modules/ModuleCaveList.php',
 ));
 
 
@@ -40,7 +48,10 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'mod_cavearchive' => 'system/modules/caves/templates',
-	'mod_cavedetails' => 'system/modules/caves/templates',
-	'mod_cavelist'    => 'system/modules/caves/templates',
+	'mod_cavearchive'       => 'system/modules/caves/templates',
+    'mod_cavearchive_empty' => 'system/modules/caves/templates',
+	'cave_cavedetails'       => 'system/modules/caves/templates',
+	'mod_cavelist'          => 'system/modules/caves/templates',
+    'cave_short'            => 'system/modules/caves/templates',
+    'cave_full'            => 'system/modules/caves/templates',
 ));
