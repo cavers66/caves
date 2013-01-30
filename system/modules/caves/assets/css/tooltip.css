@@ -1,0 +1,46 @@
+/* Style sheet tooltip */
+/* Gesamtbreite für den Tooltip definieren */
+.tool
+{width:400px;
+}
+
+/* Definitionen für den Tooltip-Titel definieren */
+.tool .tip-title
+{
+margin:0 0 10px 0;
+padding:10px 20px;
+font-family:verdana,arial,sans-serif;
+font-weight:bold;
+font-size:1.2em;
+color:#fff;
+background:#666;
+/* Gecko-Browser (Firefox) */
+-moz-box-shadow:2px 2px 8px #999;
+/* Webkit-Browser (Safari, Chrome) */
+-webkit-box-shadow:2px 2px 8px #999;
+/* allgemein CSS3 */
+box-shadow:2px 2px 8px #999;
+}
+
+/* Definitionen für den Tooltip-Beschreibungstext definieren */
+.tool .tip-text
+{
+margin:0;
+padding:10px 20px;
+font-family:verdana,arial,sans-serif;
+font-size:1.1em;
+line-height:1.7;
+background:#fff;
+/* Gecko-Browser (Firefox) */
+-moz-box-shadow:2px 2px 8px #999;
+/* Webkit-Browser (Safari, Chrome) */
+-webkit-box-shadow:2px 2px 8px #999;
+/* allgemein CSS3 */
+box-shadow:2px 2px 8px #999;
+}
+
+.tooltip img
+{
+    margin-left: 3px;
+    vertical-align: middle;
+}
