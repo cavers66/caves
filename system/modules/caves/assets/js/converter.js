@@ -16,7 +16,7 @@ window.addEvent("domready", function ()
         }
         else
         {
-            var SM = new SimpleModal({ "width": 600 });
+            var SM = new SimpleModal({ "width": 550 });
             SM.addButton("Übertragen", "btn primary", function ()
             {
                 save();
@@ -41,18 +41,19 @@ window.addEvent("domready", function ()
     });
 });
 
+// Wird direkt nach  dem laden ausgeführt
 function initialise()
 {
     var lat = document.forms["tl_cave"].elements["ctrl_latitude"].value;
     var lon = document.forms["tl_cave"].elements["ctrl_longitude"].value;
+    lat = lat.replace(/0+$/, "");
+    lon = lon.replace(/0+$/, "");
     
     if (lat > 0 && lon > 0)
     {
         document.forms["formD"].elements["latD"].value = lat;
-        document.forms["formD"].elements["lonD"].value = lon;
-        
-        
-        //convertD;
+        document.forms["formD"].elements["lonD"].value = lon;        
+        convertD();
     }
     checkIsEmpty("formD");
     checkIsEmpty("formDm");
@@ -61,6 +62,7 @@ function initialise()
         
 }
 
+// Überprüfen auf leere Felder
 function checkIsEmpty(formId)
 {
     state = true;
@@ -92,16 +94,68 @@ function checkIsEmpty(formId)
       
 }
 
+// Bereinigt und Validiert eingabe
+function cleanInput(strVar,strTyp)
+{
+    strVar = strVar.replace(/°|"|'/g, "");
+    strVar = strVar.replace(/,/g, ".");
+    
+
+    switch(strTyp)
+    {
+        case "Geo":
+            match = strVar.search(/[NS]\s[0-6]?[0-9]\s[0-6]?[0-9](\.[0-9]{1,3})?\s[EW]\s[1]?[0-9]{1,2}\s[0-6]?[0-9]?(\.[0-9]{1,3})?/);
+            if (match == -1)
+            {
+                strClean = match;
+            }
+            else
+            {
+                strClean = strVar;
+            }
+            break;
+        case "Dm":
+            
+            match = strVar.search(/([-]?[1]?[0-9]{1,2})\s([0-6]?[0-9])(\.[0-9]{1,3})?/);
+            if (match == -1)
+            {
+                strClean = match;
+            }
+            else
+            {
+                strClean = strVar;
+            }
+            break;
+        case "Dms":
+            match = strVar.search(/[-]?[1]?[0-9]{1,2}\s[0-6]?[0-9]\s[0-6]?[0-9](\.[0-9])?/);
+            if (match == -1)
+            {
+                strClean = match;
+            }
+            else
+            {
+                strClean = strVar;
+            }
+            break;
+        default:
+            strClean = strVar;
+    }
+    return strClean;   
+}
+
+
 // Konvertiert Dezimalgrad
 function convertD()
 {
     // latitude
     lat = document.forms["formD"].elements["latD"].value;
-    // Entfernt alle ", ' und ° 
-    lat = lat.replace(/"|'/g, "");  
+    lat = cleanInput(lat,"D");
+    if (lat == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     x = lat;
-    x = x.replace(/,/g, ".");
-    x = x.replace(/°/g,"");
     if (x > 0)
     {
         ns = "";
@@ -135,10 +189,13 @@ function convertD()
     
     // longitude 
     lon = document.forms["formD"].elements["lonD"].value;
-    lon = lon.replace(/"|'/g, "");
+    lon = cleanInput(lon,"D");
+    if (lon == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     y = lon;
-    y = y.replace(/,/g, ".");
-    y = y.replace(/°/g,"");
     if (y > 0)
     {
         ew = "";
@@ -196,10 +253,13 @@ function convertDm()
 {
     // Latitude
     latgm = document.forms["formDm"].elements["latDm"].value;
-    latgm = latgm.replace(/"|'/g, "");
+    latgm = cleanInput(latgm,"Dm");
+    if (latgm == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     x = latgm;
-    x = x.replace(/,/g, ".");
-    x = x.replace(/°/g, "");
     splited = x.split(" ");
     xg = splited[0];
     xm = splited[1];
@@ -234,10 +294,13 @@ function convertDm()
 
     // Longitude
     longm = document.forms["formDm"].elements["lonDm"].value;
-    longm = longm.replace(/"|'/g, "");
+    longm = cleanInput(longm,"Dm");
+    if (longm == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     y = longm;
-    y = y.replace(/,/g, ".");
-    y = y.replace(/°/g, "");
     splited = y.split(" ");
     yg = splited[0];
     ym = splited[1];
@@ -295,10 +358,13 @@ function convertDms()
 {
     // Latitude
     latgms = document.forms["formDms"].elements["latDms"].value;
-    latgms = latgms.replace(/"|'/g, "");
+    latgms = cleanInput(latgms,"Dms");
+    if (latgms == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     x = latgms;
-    x = x.replace(/,/g, ".");
-    x = x.replace(/°/, "");
     splited = x.split(" ");
     xg = splited[0];
     xm = splited[1];
@@ -334,10 +400,13 @@ function convertDms()
 
     // Longitude
     longms = document.forms["formDms"].elements["lonDms"].value;
-    longms = longms.replace(/"|'/g, "");
+    longms = cleanInput(longms,"Dms");
+    if (longms == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
     y = longms;
-    y = y.replace(/,/g, ".");
-    y = y.replace(/°/, "");
     splited = y.split(" ");
     yg = splited[0];
     ym = splited[1];
@@ -394,15 +463,13 @@ function convertDms()
 function convertGeo()
 {
     latlon = document.forms["formGeo"].elements["latlonDm"].value;
-    latlon = latlon.replace(/"|'/g, "");
-    xy = latlon.replace(/,/g, ".");
-    xygm = xy;
-    xy = xy.replace(/°/g, "");
-    xy = xy.replace(/^\s+/g, "");
-    // 
-    xy = xy.replace(/([NS])([0-9].*)/g, "$1 $2");
-    xy = xy.replace(/(.*[EW])([0-9].*)/g, "$1 $2");
-    xy = xy.replace(/\s\s+/g, " ");
+    latlon = cleanInput(latlon,"Geo");
+    if (latlon == -1)
+    {
+        alert("Eingegebener Wert ist ungültig!");
+        return;
+    } 
+    xy = latlon
     splited = xy.split(" ");
     ns = splited[0];
     xg = splited[1];
