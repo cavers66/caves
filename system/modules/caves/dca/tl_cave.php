@@ -219,21 +219,19 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 		'latitude' => array
 		(
             'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['latitude'],
-            'default'                 => '0.000000',
             'exclude'                 => true,
             'inputType'               => 'text',
             'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
-            'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'longitude' => array
 		(
             'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['longitude'],
-            'default'                 => '0.000000',
             'exclude'                 => true,
             'inputType'               => 'text',
             'eval'                    => array('rgxp'=>'alnum', 'maxlength'=>9, 'doNotCopy'=>true, 'tl_class'=>'w50 wizard'),
             'wizard'                  => array(array('tl_cave', 'getGpsConverter')),
-            'sql'                     => "decimal(9,6) NOT NULL default '0.000000'"
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
         'isSecure' => array
 		(
@@ -247,7 +245,6 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 		'altitude' => array
 		(
             'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['altitude'],
-            'default'                 => '0',
             'exclude'                 => true,
             'inputType'               => 'text',
             'eval'                    => array('rgxp'=>'alnum', 'doNotCopy'=>true, 'tl_class'=>'clr'),
@@ -310,7 +307,8 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'inputType'               => 'select',
 			'foreignKey'              => 'tl_cave_category.title',
 			'eval'                    => array('mandatory'=>false, 'includeBlankOption'=>true, 'maxlength'=>255, 'tl_class'=>'clr'),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+            'relation'                => array('type'=>'hasOne', 'load'=>'eager')
 		),
 		'mainlength' => array
 		(
@@ -318,7 +316,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>false, 'maxlength'=>7,'doNotCopy'=>true, 'tl_class'=>'w50'),
-			'sql'                     => "decimal(6,1) NOT NULL default '0.0'"
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'totallength' => array
 		(
@@ -326,7 +324,7 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>false, 'maxlength'=>7,'doNotCopy'=>true, 'tl_class'=>'w50'),
-			'sql'                     => "decimal(6,1) NOT NULL default '0.0'"
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'notpublicopen' => array
 		(
@@ -398,8 +396,8 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['evaluation'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'                 => range(1,6),
-			'eval'                    => array('includeBlankOption' =>true,'mandatory'=>false,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
+			'options'                 => range(1,5),
+			'eval'                    => array('mandatory'=>false,'includeBlankOption'=>true,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(1) NOT NULL default ''"
 		),
 		'difficulty' => array
@@ -407,8 +405,8 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['difficulty'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'                 => range(1,6),
-			'eval'                    => array('includeBlankOption' =>true, 'mandatory'=>false,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
+			'options'                 => range(1,5),
+			'eval'                    => array('mandatory'=>false,'includeBlankOption'=>true,'doNotCopy'=>true, 'maxlength'=>2, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(1) NOT NULL default ''"
 		),
 		'wheelinglife' => array
@@ -432,11 +430,12 @@ $GLOBALS['TL_DCA']['tl_cave'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_cave']['equipment'],
 			'inputType'               => 'checkbox',
 			'options_callback'        => array('tl_cave', 'getEquipment'),
-			'load_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Laden der Defaultwerte
+            'load_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Laden der Defaultwerte
 			'save_callback'           => array(array('tl_cave', 'setDefaultEquipment')), // Speichert auch die Defaultwerte obwohl "disabled"
 			'eval'                    => array('multiple'=>true, 'alwaysSave' =>true,'doNotCopy'=>true),    // 'alwaysSave'=>true, damit werte auf jeden fall gespeichert werden
             'wizard'                  => array(array('tl_cave', 'disableDefault')), // Deaktivieren der Checkboxen mit Defaultwerten
-			'sql'                     => "blob NULL"
+			'sql'                     => "blob NULL",
+            'relation'                => array('type'=>'hasMany', 'load'=>'lazy')
 		),
         'addImage' => array
 		(
