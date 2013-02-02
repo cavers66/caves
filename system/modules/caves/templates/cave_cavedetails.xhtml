@@ -1,6 +1,7 @@
 
 <?php
 $GLOBALS['TL_CSS'][]='system/modules/caves/assets/css/tooltip.css';
+$GLOBALS['TL_CSS'][]='system/modules/caves/assets/css/ratingscale.css';
 
 
 ?>
@@ -17,9 +18,248 @@ $GLOBALS['TL_CSS'][]='system/modules/caves/assets/css/tooltip.css';
     </div>    
     <div class="info_container g4">
         <h3>Informationen</h3>
-        <?php echo $this->info; ?> 
+        <?php if ($this->info): ?>
+        <!-- Katasterdaten - Start-->
+        <?php if ($this->info['cadastre_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Katasterdaten</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <table>
+                        <? if ($this->info['cadastrenumber']): ?>
+                        <tr>
+                            <th class="info_left">Katasternummer:</th>
+                            <td class="info_right"><?php echo $this->info['cadastrenumber']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['mapsheet']): ?>
+                        <tr>
+                            <th class="info_left">Kartenblatt:</th>
+                            <td class="info_right"><?php echo $this->info['mapsheet']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Katasterdaten - Ende-->
+        <!-- Adresse & Koordinaten - Start-->
+        <?php if ($this->info['address_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Adresse & Koordinaten</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <table>
+                        <? if ($this->info['postal'] || $this->info['city']): ?>
+                        <tr>
+                            <th class="info_left">PLZ / Ort:</th>
+                            <td class="info_right"><?php echo $this->info['postal']; ?>  <?php echo $this->info['city']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['coordinates']): ?>
+                        <tr>
+                            <th class="info_left">Koordinaten:</th>
+                            <td class="info_right"><?php echo $this->info['coordinates']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['altitude']): ?>
+                        <tr>
+                            <th class="info_left">Höhe ü. NN:</th>
+                            <td class="info_right"><?php echo $this->info['altitude']; ?> Meter</td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['directions']): ?>
+                        <tr>
+                            <th colspan="2">Weg-Beschreibung:</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><?php echo $this->info['directions']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Adresse & Koordinaten - Ende-->
+        <!-- Höhlendaten - Start-->
+        <?php if ($this->info['data_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Höhlendaten</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <table>
+                        <? if ($this->info['category']): ?>
+                        <tr>
+                            <th class="info_left">Kategorie:</th>
+                            <td class="info_right"><?php echo $this->info['category']; ?>
+                            <?php if ($this->info['c_description']): ?>
+                                <a class="tooltip" title="<?php echo $this->info['category']; ?>?" rel="<?php echo $this->info['c_description']; ?>">
+                                    <img src="system/modules/caves/assets/img/help16.png" alt="Info" width="16" height="16" />
+                                </a>
+                            <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['mainlength']): ?>
+                        <tr>
+                            <th class="info_left">Befahrbare Länge:</th>
+                            <td class="info_right"><?php echo $this->info['mainlength']; ?> Meter</td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['totallength']): ?>
+                        <tr>
+                            <th class="info_left">Gesamt Länge:</th>
+                            <td class="info_right"><?php echo $this->info['totallength']; ?> Meter</td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Höhlendaten - Ende-->
+        <!-- Fledermausschutz & Zugang - Start-->
+        <?php if ($this->info['access_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Schutz & Zugang</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <table>
+                        <? if ($this->info['islock']): ?>
+                        <tr>
+                            <th colspan="2">Höhle wird zum Fledermausschutz verschlossen!</th>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if ($this->info['lockdate']): ?>
+                        <tr>
+                            <td><?php echo $this->info['lockdate']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['notpublicopen']): ?>
+                        <tr>
+                            <th colspan="2">Höhle ist immer verschlossen!</th>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if ($this->info['contact']): ?>
+                        <tr>
+                            <td colspan="2"><?php echo $this->info['contact']; ?></td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Fledermausschutz & Zugang - Ende-->
+        <!-- Statistik - Start-->
+        <?php if ($this->info['statistic_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Bewertung & Befahrungszeit</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <table>
+                        <? if ($this->info['evaluation']): ?>
+                        <tr>
+                            <th class="info_left">Bewertung:</th>
+                            <td class="info_right">
+                                <div class="rating">
+                                    <span class="rating_scale" style="">
+                                        <span class="rating_point" style="margin-left: <?php echo $this->info['evaluation_point']; ?>px;"><?php echo $this->info['evaluation']; ?></span>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['difficulty']): ?>
+                        <tr>
+                            <th class="info_left">Schwierigkeit:</th>
+                            <td class="info_right">
+                                <div class="rating">
+                                    <span class="rating_scale" style="">
+                                        <span class="rating_point" style="margin-left: <?php echo $this->info['difficulty_point']; ?>px;"><?php echo $this->info['difficulty']; ?></span>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <? if ($this->info['wheelinglife']): ?>
+                        <tr>
+                            <th class="info_left">Befahrungszeit:</th>
+                            <td class="info_right"><?php echo $this->info['wheelinglife']; ?> Stunden</td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Statistik - Ende-->
+        <!-- Ausrüstung - Start-->
+        <?php if ($this->info['equipment_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Ausrüstung</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <ul>
+                        <?php foreach ($this->info['equipment'] as $key =>$value): ?>
+                        <li><?php echo $value['title']; ?>
+                        <?php if(!empty($value['description'])) :?>
+                            <a class="tooltip" title="<?php echo $value['title']; ?>?" rel="<?php echo $value['description']; ?>">
+                                <img src="system/modules/caves/assets/img/help16.png" alt="Info" width="16" height="16" />
+                            </a>
+                        <?php endif; ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Ausrüstung - Ende-->
+        <!-- Links - Start-->
+        <?php if ($this->info['links_legend']): ?>
+        <div class="ce_accordion block">
+            <div class="toggler">
+                <span class="toggler_first">Links</span>
+            </div>
+            <div class='accordion'>
+                <div>
+                    <ul>
+                        <?php foreach ($this->info['links'] as $key =>$value): ?>
+                        <li>
+                            <a href="<?php echo $value['url']; ?>" target="_blank"><?php echo $value['titleText']; ?></a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>    
+        <?php endif; ?>
+        <!-- Links - Ende-->
+        <?php else: ?>
+        <p class="center">Leider keine Informationen verfügbar.</p>      
+        <?php endif; ?> 
     </div>
     <div style="clear: left"></div>
-    <p><?php echo $this->description;?></p>
+    <h3>Beschreibung</h3>
+    <?php if($this->description): ?>
+    <?php echo $this->description;?>
+    <?php else: ?>
+    <p>Leider keine Beschreibung vorhanden</p>
+    <?php endif; ?>
     <p class="back"><a href="<?php echo $this->referer; ?>" title="<?php echo $this->back; ?>"><?php echo $this->back; ?></a></p>
 </div>

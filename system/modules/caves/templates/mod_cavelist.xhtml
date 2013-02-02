@@ -15,12 +15,27 @@
 						setcookie('TS_TABLE_CAVES', 0 . '|' . 'asc', 0, '/');
 					}
     
-    echo $this->caves;
+    
 ?>
+    <div class="ce_table block">
+        <table class="sortable" id="table_caves" summary="Höhlenliste" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="head_0 col_first"><a class="pointer">Name</a></th>
+                    <th class="head_1"><a class="pointer">PLZ</a></th>
+                    <th class="head_2"><a class="pointer">Stadt</a></th>
+                    <th class="head_3 col_last">Bild</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php echo $this->caves; ?>
+            </tbody>
+        </table>
+    </div>
       
     <script type="text/javascript">
       /* <![CDATA[ */window.addEvent("domready", function() {new TableSort("table_caves", ".", ",");});/* ]]> */
     </script>
-  </div>
+  
 
 </div>

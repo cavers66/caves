@@ -68,17 +68,7 @@ class ModuleCaveList extends \ModuleCave
     {
         if ($dbObject->count() != 0 )
         {
-            $strHtml = "<div class='ce_table block'> \n
-                        <table class='sortable' id='table_caves' summary='Höhlenliste' style='margin-bottom: 0;'> \n
-                            <thead> \n
-                                <tr> \n
-                                    <th class='head_0 col_first'><a class='pointer'>Name</a></th> \n
-                                    <th class='head_1'><a class='pointer'>PLZ</a></th> \n
-                                    <th class='head_2'><a class='pointer'>Stadt</a></th> \n
-                                    <th class='head_3 col_last'>Bild</th> \n
-                                </tr> \n
-                            </thead> \n
-                            <tbody> \n";
+            $strHtml = "";
         
             $class_tr = '';   // Variable für Zusammengesetzte Klassenangabe
             
@@ -106,7 +96,6 @@ class ModuleCaveList extends \ModuleCave
                 $dbObject->next();
             }
         
-            $strHtml .= "</tbody>\n </table>\n";
         }
         else
         {
@@ -146,46 +135,5 @@ class ModuleCaveList extends \ModuleCave
                   
 	}
 
-    /**
-	 * Generate a URL and return it as string
-	 * @param object
-	 * @param boolean
-	 * @return string
-	 */
-	protected function generateNewsUrl($objItem, $blnAddArchive=false)
-	{
-		$strCacheKey = 'id_' . $objItem->id;
-
-		// Load the URL from cache
-		if (isset(self::$arrUrlCache[$strCacheKey]))
-		{
-			return self::$arrUrlCache[$strCacheKey];
-		}
-
-		// Initialize the cache
-		self::$arrUrlCache[$strCacheKey] = null;
-
-        // Link to the default page
-		if (self::$arrUrlCache[$strCacheKey] === null)
-		{
-			$objPage = \PageModel::findByPk($objItem->getRelated('pid')->jumpTo);
-
-			if ($objPage === null)
-			{
-				self::$arrUrlCache[$strCacheKey] = ampersand(\Environment::get('request'), true);
-			}
-			else
-			{
-				self::$arrUrlCache[$strCacheKey] = ampersand($this->generateFrontendUrl($objPage->row(), ($GLOBALS['TL_CONFIG']['useAutoItem'] ?  '/' : '/items/') . ((!$GLOBALS['TL_CONFIG']['disableAlias'] && $objItem->alias != '') ? $objItem->alias : $objItem->id)));
-			}
-
-			// Add the current archive parameter (news archive)
-			if ($blnAddArchive && \Input::get('month') != '')
-			{
-				self::$arrUrlCache[$strCacheKey] .= ($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;' : '?') . 'month=' . \Input::get('month');
-			}
-		}
-
-		return self::$arrUrlCache[$strCacheKey];
-	}
+   
 }
