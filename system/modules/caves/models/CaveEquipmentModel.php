@@ -34,27 +34,24 @@ class CaveEquipmentModel extends \Model
 
 
 	/**
-	 * Find multiple cave archives by their IDs
+	 * Find multiple cave equipment by their title
 	 * 
-	 * @param array $arrIds     An array of archive IDs
+	 * @param array $arrTitles     An array of equipment title
 	 * @param array $arrOptions An optional options array
 	 * 
-	 * @return \Model\Collection|null A collection of models or null if there are no news archives
+	 * @return \Model\Collection|null A collection of models or null if there are no cave equipment
 	 */
-	public static function findMultipleByIds($arrIds, array $arrOptions=array())
+	public static function findMultipleByTitle($arrTitles, array $arrOptions=array())
 	{
-		if (!is_array($arrIds) || empty($arrIds))
+		if (!is_array($arrTitles) || empty($arrTitles))
 		{
 			return null;
 		}
 
 		$t = static::$strTable;
-
-		if (!isset($arrOptions['order']))
-		{
-			$arrOptions['order'] = \Database::getInstance()->findInSet("$t.id", $arrIds);
-		}
-
-		return static::findBy(array("$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")"), null, $arrOptions);
+        $list = "'" . implode("','", $arrTitles) . "'";
+		
+        $objEqu = \Database::getInstance()->query("SELECT title, description FROM tl_cave_equipment WHERE title IN(" . $list . ")");
+        return $objEqu;
 	}
 }
