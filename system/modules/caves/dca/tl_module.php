@@ -3,10 +3,10 @@
 /**
  * Contao Open Source CMS
  * 
- * Copyright (C) 2005-2013 Leo Feyer
+ * Copyright (C) 2013 Ralf Rötzer
  * 
- * @package Core
- * @link    https://contao.org
+ * @package cave
+ * @link    https://www.cavers.de
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
@@ -14,9 +14,9 @@
 /**
  * Table tl_module
  */
-$GLOBALS['TL_DCA']['tl_module']['palettes']['cavelist'] = '{title_legend},name,headline,type;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['cavelist'] = '{title_legend},name,headline,type;{config_legend},cave_archives;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['cavedetails']  = '{title_legend},name,headline,type;{config_legend},cave_archives;{template_legend:hide},cave_metaFields,cave_template,imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['cavearchive'] = '{title_legend},name,headline,type;{config_legend},cave_archives,cave_jumpToCurrent,cave_readerModule,perPage,cave_format;{template_legend:hide},cave_metaFields,cave_template,imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['cavearchive'] = '{title_legend},name,headline,type;{config_legend},cave_jumpToCurrent,cave_readerModule,perPage,cave_format;{template_legend:hide},cave_metaFields,cave_template,imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 
 /**
@@ -144,10 +144,10 @@ class tl_module_caves extends Backend
 	 */
 	public function getCaveArchives()
 	{
-		/*if (!$this->User->isAdmin && !is_array($this->User->caves))
+		if (!$this->User->isAdmin && !is_array($this->User->caves))
 		{
 			return array();
-		}*/
+		}
 
 		$arrArchives = array();
 		$objArchives = $this->Database->execute("SELECT id, title FROM tl_cave_archive ORDER BY title");
