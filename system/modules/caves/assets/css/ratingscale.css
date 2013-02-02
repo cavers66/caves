@@ -1,0 +1,23 @@
+
+
+.mod_cavedetails .rating {
+    margin: 0 auto 0 auto;
+    padding: 0 0 0 15px;
+    line-height: 20px;
+}
+.mod_cavedetails .rating_scale {
+    display: inline-block;
+    width: 180px;
+    height: 20px;
+    background-image: url("../img/farbbalken.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.mod_cavedetails .rating_point{
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    background-color: #6791c8;
+    text-align: center;
+    color: #fff; 
+}
